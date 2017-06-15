@@ -46,3 +46,28 @@ Agregar la key correspondiente a google maps en el import de la librería js en 
 
 `<script src="http://maps.google.com/maps/api/js?key=<key>"></script>`
 
+
+### Probar Autenticatción:
+
+#### GET a `http://<host>/setup`
+
+#### POST a `http://<host>/api/authenticate` 
+
+con el siguiente cuerpo (probar otros valores para comprobar que funciones bien):
+
+```
+{
+	"name": "admin",
+    "password": "admin"
+}
+```
+
+
+#### GET a `http://<host>/api/users` 
+
+con los siguientes encabezados:
+
+```
+x-access-token: <token>
+accept: application/json
+```
