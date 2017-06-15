@@ -1,39 +1,49 @@
-# Node Token Authentication
+# Ejemplo de Mean usando maps y autenticación, para subir a codenvy.
 
-This repo uses JSON Web Tokens and the [jsonwebtoken](https://github.com/auth0/node-jsonwebtoken) package to implement token based authentication on a simple Node.js API.
+Fuentes
 
-This is a starting point to demonstrate the method of authentication by verifying a token using Express route middleware.
+[GoogleMap AngularJS Directive](https://github.com/allenhwkim/angularjs-google-maps)
+[Node Token Authentication](https://github.com/scotch-io/node-token-authentication)
+[Facebook Comments Plugin](https://developers.facebook.com/docs/plugins/comments/)
 
-## Requirements
 
-- node and npm
+## Codenvy
 
-## Usage
+[Create Workspace](https://codenvy.io/dashboard/#/create-project)
 
-1. Clone the repo: `git clone git@github.com:scotch-io/node-token-authentication`
-2. Install dependencies: `npm install`
-3. Change SECRET in `config.js`
-4. Add your own MongoDB database to `config.js`
-5. Start the server: `node server.js`
-6. Create sample user by visiting: `http://localhost:8080/setup`
+Source => Import from existing location (https://github.com/iaw-dcic/mean-maps-auth.git)
+Create new workspace from stack => Node
 
-Once everything is set up, we can begin to use our app by creating and verifying tokens.
+Cambiar nombres y descripciones 
 
-### Getting a Token
+## Eclipse Che
 
-Send a `POST` request to `http://localhost:8080/api/authenticate` with test user parameters as `x-www-form-urlencoded`. 
+### Mongo
+
+Instalar Mongo desde la consola [Instrucciones](https://docs.mongodb.com/manual/tutorial/install-mongodb-on-debian/#install-mongodb-community-edition)
 
 ```
-  {
-    name: 'Nick Cerminara',
-    password: 'password'
-  }
+sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 0C49F3730359A14518585931BC711F9BA15703C6
+echo "deb http://repo.mongodb.org/apt/debian jessie/mongodb-org/3.4 main" | sudo tee /etc/apt/sources.list.d/mongodb-org-3.4.list
+sudo apt-get update
+sudo apt-get install -y mongodb-org
 ```
 
-### Verifying a Token and Listing Users
 
-Send a `GET` request to `http://localhost:8080/api/users` with a header parameter of `x-access-token` and the token.
+### configurar comandos:
 
-You can also send the token as a URL parameter: `http://localhost:8080/api/users?token=YOUR_TOKEN_HERE`
+Agregar 2 run commands:
 
-Or you can send the token as a POST parameter of `token`.
+- db: 
+  - command line: cd /projects/mean-maps-auth && mkdir -p data && mongod --dbpath ./data
+
+- node server:
+  - command line: cd /projects/mean-maps-auth && npm install && node server.js
+  - preview: ${server.3000}
+
+### Maps Key
+
+Agregar la key correspondiente a google maps en el import de la librería js en index.html
+
+<script src="http://maps.google.com/maps/api/js?key=<key>"></script>
+
