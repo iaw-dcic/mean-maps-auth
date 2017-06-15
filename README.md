@@ -31,14 +31,14 @@ sudo apt-get install -y mongodb-org
 
 ### configurar comandos:
 
-Agregar 2 'run commands:
+Agregar 2 'run commands':
 
 - db: 
-  - command line: cd /projects/mean-maps-auth && mkdir -p data && mongod --dbpath ./data
+  - command line: `cd /projects/mean-maps-auth && mkdir -p data && mongod --dbpath ./data`
 
 - node server:
-  - command line: cd /projects/mean-maps-auth && npm install && node server.js
-  - preview: ${server.3000}
+  - command line: `cd /projects/mean-maps-auth && npm install && node server.js`
+  - preview: `${server.3000}`
 
 ### Maps Key
 
