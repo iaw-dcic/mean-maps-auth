@@ -58,14 +58,14 @@ con el siguiente cuerpo (probar otros valores para comprobar que funciones bien)
 ```
 {
 	"name": "admin",
-    "password": "admin"
+ 	"password": "admin"
 }
 ```
 
 
 #### GET a `http://<host>/api/users` 
 
-con los siguientes encabezados:
+con los siguientes encabezados, reemplazando el token con el obtenido anteriormente:
 
 ```
 x-access-token: <token>
