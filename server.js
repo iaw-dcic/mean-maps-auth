@@ -9,6 +9,9 @@ var mongoose    = require('mongoose');
 const path = require('path');
 
 var jwt    = require('jsonwebtoken'); // used to create, sign, and verify tokens
+var bcrypt = require('bcrypt');
+const saltRounds = 10;
+
 var config = require('./config'); // get our config file
 var User   = require('./app/models/user'); // get our mongoose model
 
@@ -33,16 +36,20 @@ app.use(morgan('dev'));
 app.get('/setup', function(req, res) {
 
 	// create a sample user
-	var admin = new User({ 
-		name: 'admin', 
-		password: 'admin',
-		admin: true 
-	});
-	admin.save(function(err) {
-		if (err) throw err;
+	var password = 'admin'
+	bcrypt.hash(password, saltRounds, function(err, hash) {
+  		// Store hash in your password DB.
+		var admin = new User({ 
+			name: 'admin', 
+			password: hash,
+			admin: true 
+		});
+		admin.save(function(err) {
+			if (err) throw err;
 
-		console.log('User saved successfully');
-		res.json({ success: true });
+			console.log('User saved successfully');
+			res.json({ success: true });
+		});
 	});
 });
 
@@ -74,23 +81,29 @@ apiRoutes.post('/authenticate', function(req, res) {
 			res.json({ success: false, message: 'Authentication failed. User not found.' });
 		} else if (user) {
 
-			// check if password matches
-			if (user.password != req.body.password) {
-				res.json({ success: false, message: 'Authentication failed. Wrong password.' });
-			} else {
+			bcrypt.compare(req.body.password, user.password, function(err, match) {
+				if (!match) {
+					res.json({ success: false, message: 'Authentication failed. Wrong password.' });
+				} else {
 
-				// if user is found and password is right
-				// create a token
-				var token = jwt.sign(user, app.get('superSecret'), {
-					expiresIn: 86400 // expires in 24 hours
-				});
+					// if user is found and password is right
+					// create a token
+					var token = jwt.sign(
+						{
+							'username': user.name,
+							'admin': user.admin
+						}, 
+						app.get('superSecret'), {
+						expiresIn: 86400 // expires in 24 hours
+					});
 
-				res.json({
-					success: true,
-					message: 'Enjoy your token!',
-					token: token
-				});
-			}		
+					res.json({
+						success: true,
+						message: 'Enjoy your token!',
+						token: token
+					});
+				}		
+			});
 
 		}
 
